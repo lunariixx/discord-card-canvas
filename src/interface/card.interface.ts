@@ -8,36 +8,31 @@ type HEX = `#${string}`;
 export type Color = RGB | RGBA | HEX;
 
 /**
- * Resolvable font
- */
-export type FontResolvable =
-    | 'Inter'
-    | 'Nunito'
-    | 'Manrope'
-    | 'Open Sans'
-    | 'Raleway'
-    | 'Roboto Slab'
-    | 'Spectral SC'
-    | 'Bellota';
-
-/**
  * User status in Discord
  */
 export type UserStatus = 'online' | 'idle' | 'dnd' | 'offline' | 'invisible' | 'streaming';
 
 export interface TextCard {
-    /**
-     * Content (string)
-     */
-    content: string;
-    /**
-     * Text color
-     */
-    color?: Color;
-    /**
-     * Text font
-     */
-    font?: FontResolvable;
+  /**
+   * Content (string)
+   */
+  content: string;
+  /**
+   * Text color
+   */
+  color?: Color;
+  /**
+   * Text font
+   */
+  font?: string;
+  /**
+   * Text size
+   */
+  size?: number;
+  /**
+   * Text weight
+   */
+  weight?: string;
 }
 
 export type BorderStyle = 'fill' | 'stroke';
