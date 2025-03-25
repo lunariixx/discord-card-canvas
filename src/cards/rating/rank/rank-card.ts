@@ -30,6 +30,14 @@ export interface RankCardParams {
    */
   requiredXP: number;
   /**
+   * The user's current total experience
+   */
+  totalCurrentXP: number;
+  /**
+   * Total required experience to the next level
+   */
+  totalRequiredXP: number;
+  /**
    * User status
    */
   userStatus: UserStatus;
@@ -110,6 +118,8 @@ export class RankCardBuilder {
   public currentRank: number;
   public currentXP: number;
   public requiredXP: number;
+  public totalCurrentXP: number;
+  public totalRequiredXP: number;
   public userStatus: UserStatus;
   public backgroundImgURL?: string;
   public backgroundColor: BackgroundRankColor;
@@ -132,6 +142,8 @@ export class RankCardBuilder {
     currentRank,
     currentXP,
     requiredXP,
+    totalCurrentXP,
+    totalRequiredXP,
     userStatus,
     backgroundImgURL,
     backgroundColor = { background: '#FFF', bubbles: '#0CA7FF' },
@@ -153,6 +165,8 @@ export class RankCardBuilder {
     this.currentRank = currentRank;
     this.currentXP = currentXP;
     this.requiredXP = requiredXP;
+    this.totalCurrentXP = totalCurrentXP;
+    this.totalRequiredXP = totalRequiredXP;
     this.userStatus = userStatus;
     this.backgroundImgURL = backgroundImgURL;
     this.backgroundColor = backgroundColor;
@@ -316,6 +330,24 @@ export class RankCardBuilder {
   }
 
   /**
+   * Sets the user's current experience
+   * @param totalCurrentXP The user's current total experience
+   */
+  setTotalCurrentXP(totalCurrentXP: number): this {
+    this.totalCurrentXP = totalCurrentXP;
+    return this;
+  }
+    
+  /**
+   * Sets the required experience to the next level
+   * @param totalRequiredXP Total required experience to the next level
+   */
+  setTotalRequiredXP(totalRequiredXP: number): this {
+    this.totalRequiredXP = totalRequiredXP;
+    return this;
+  }
+
+  /**
    * Draws the content on the created canvas
    * @param ctx The context of the created canvas
    * @param canvasWidth Width of the created canvas
@@ -329,15 +361,6 @@ export class RankCardBuilder {
     options?: OptionsDraw,
   ): Promise<void> {
     if (!options?.only || options.only.includes('background')) {
-      // Border radius
-      ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(1000, 250);
-      ctx.arcTo(0, 250, 0, 0, 30);
-      ctx.arcTo(0, 0, 1000, 0, 30);
-      ctx.arcTo(1000, 0, 1000, 250, 30);
-      ctx.arcTo(1000, 250, 0, 250, 30);
-      ctx.clip();
 
       // Background
       if (this.backgroundImgURL) {
@@ -554,14 +577,14 @@ export class RankCardBuilder {
       ctx.font = `600 35px '${this.fontDefault}'`;
       ctx.textAlign = 'right';
       ctx.fillStyle = this.requiredXPColor;
-      ctx.fillText(`${this.requiredXP} xp`, offsetLvlXP, 150);
-      offsetLvlXP -= ctx.measureText(`${this.requiredXP} xp`).width + 3;
-      ctx.fillText('/', offsetLvlXP, 150);
+      ctx.fillText(`${this.totalRequiredXP} xp`, offsetLvlXP, 150);
+      offsetLvlXP -= ctx.measureText(`${this.totalRequiredXP} xp`).width + 3;
+      ctx.fillText('/', offsetLvlXP, 150); 
       ctx.fillStyle = this.currentXPColor;
       // 3px - the distance to the left and right of "/"
       offsetLvlXP -= ctx.measureText(`/`).width + 3;
-      ctx.fillText(`${this.currentXP}`, offsetLvlXP, 150);
-      offsetLvlXP -= ctx.measureText(`${this.currentXP}`).width;
+      ctx.fillText(`${this.totalCurrentXP}`, offsetLvlXP, 150);
+      offsetLvlXP -= ctx.measureText(`${this.totalCurrentXP}`).width;
       ctx.restore();
     }
 
